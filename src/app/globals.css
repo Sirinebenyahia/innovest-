@@ -1,26 +1,139 @@
+/* 🌍 src/app/globals.css — Innovest Theme (Tailwind v4) */
+
+/* ===================== Import Tailwind ===================== */
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
+/* ===================== Structure de base ===================== */
+html,
+body,
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  height: 100%;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+/* ===================== Thème global ===================== */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --radius: 0.625rem;
+
+    /* 🎨 Couleurs principales (HSL format) */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* 🔵 Couleurs primaires */
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+
+    /* ⚪ Couleurs secondaires */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    /* 🎛 Couleurs neutres */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    /* ✨ Couleur accent (bleu Innovest) */
+    --accent: 221.2 83.2% 53.3%;
+    --accent-foreground: 210 40% 98%;
+
+    /* 🔴 Couleurs d'erreur / destructive */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Bordures et anneaux */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+  }
+
+  /* ⚙️ Réinitialisation pour éviter les styles natifs */
+  button {
+    background: unset;
+    color: unset;
+    border: unset;
+  }
+
+  /* Appliquer couleurs globales */
+  * {
+    @apply border-[hsl(var(--border))];
+  }
+
+  body {
+    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased;
+    font-family: "Inter", system-ui, sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ===================== Composants réutilisables ===================== */
+@layer components {
+  /* 🪪 Carte / section */
+  .card {
+    @apply bg-white rounded-2xl shadow p-4;
+  }
+
+  /* 🔖 Badge */
+  .badge {
+    @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium;
+  }
+
+  /* 🔘 Boutons génériques */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium shadow-sm transition
+           focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* ✅ Bouton principal (bleu) */
+  .btn-primary {
+    @apply bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]
+           hover:bg-[hsl(var(--primary))]/90 focus:ring-[hsl(var(--primary))]/30;
+  }
+
+  /* 🔴 Bouton "danger" */
+  .btn-danger {
+    @apply bg-[hsl(var(--destructive))] text-[hsl(var(--destructive-foreground))]
+           hover:bg-[hsl(var(--destructive))]/90 focus:ring-[hsl(var(--destructive))]/30;
+  }
+
+  /* 🟡 Badge d’avertissement */
+  .badge-warn {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  /* 🟢 Badge OK */
+  .badge-ok {
+    @apply bg-green-100 text-green-700;
+  }
+}
+
+/* ===================== Utilitaires personnalisés ===================== */
+@layer utilities {
+  .bg-primary {
+    background-color: hsl(var(--primary));
+  }
+
+  .text-primary-foreground {
+    color: hsl(var(--primary-foreground));
+  }
+
+  .bg-destructive {
+    background-color: hsl(var(--destructive));
+  }
+
+  .text-destructive-foreground {
+    color: hsl(var(--destructive-foreground));
+  }
+
+  .bg-accent {
+    background-color: hsl(var(--accent));
+  }
+
+  .text-accent-foreground {
+    color: hsl(var(--accent-foreground));
+  }
 }
