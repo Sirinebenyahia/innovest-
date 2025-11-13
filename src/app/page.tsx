@@ -12,8 +12,45 @@ export default function HomePage() {
       <Navbar />
 
       {/* HERO */}
-      <section className="relative isolate pt-28 md:pt-36 pb-16">
-        <div className="absolute inset-0 -z-10 bg-hero-gradient" />
+      <section className="flex flex-col md:flex-row items-center justify-between px-8 md:px-16 pt-40 pb-24">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="max-w-xl text-center md:text-left"
+        >
+          <h1 className="text-5xl md:text-6xl font-extrabold text-blue-900 leading-tight">
+            🚀 Connecte Startups & Investisseurs
+          </h1>
+          <p className="mt-5 text-lg text-gray-600">
+            Innovest propulse les jeunes entrepreneurs et facilite la mise en
+            relation avec les investisseurs du futur.
+          </p>
+          <div className="mt-8 flex gap-4 justify-center md:justify-start">
+            <Link
+              href="/start"
+              className="bg-blue-700 text-white px-7 py-3 rounded-full shadow-lg hover:shadow-blue-300 hover:scale-105 transition-all duration-300"
+            >
+              Commencer maintenant       
+            </Link>
+            <Link
+              href="/about"
+              className="border border-blue-700 text-blue-700 px-7 py-3 rounded-full hover:bg-blue-50 hover:scale-105 transition-all duration-300"
+            >
+              En savoir plus
+            </Link>
+          </div>
+        </motion.div>
+
+        <motion.img
+          src="/illustration-startup.svg"
+          alt="Startup"
+          className="w-full md:w-[430px] mt-12 md:mt-0"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1 }}
+        />
+      </section>
 
         <div className="container grid items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
           <motion.div variants={fadeUp} initial="initial" animate="animate">
