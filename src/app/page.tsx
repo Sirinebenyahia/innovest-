@@ -28,7 +28,7 @@ export default function HomePage() {
               href="/start"
               className="bg-blue-700 text-white px-7 py-3 rounded-full shadow-lg hover:shadow-blue-300 hover:scale-105 transition-all duration-300"
             >
-              Commencer maintenant
+              Commencer maintenant       
             </Link>
             <Link
               href="/about"
