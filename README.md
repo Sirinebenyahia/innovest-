@@ -66,7 +66,7 @@ Et ajouter :
 
 ```
 DATABASE_URL="postgres://USER:PASSWORD@localhost:5432/innovest"
-JWT_SECRET="ma-super-cle-ultra-secrete-321"
+JWT_SECRET="ta_chaine_secrete_pour_signer_les_jwt"
 ```
 
 Générer un JWT secret fort :
@@ -229,8 +229,7 @@ src/
       auth/
         signup/
         login/
-      startup/
-        create/
+
   components/
   db/
   lib/
