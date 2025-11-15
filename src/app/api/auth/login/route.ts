@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { compare } from "bcryptjs";
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Vérifier si utilisateur existe
+    // Vérifier utilisateur
     const [user] = await db
       .select()
       .from(users)
@@ -38,31 +38,36 @@ export async function POST(request: Request) {
       );
     }
 
-    // Vérifier JWT_SECRET
+    // Vérifier clé JWT
     if (!process.env.JWT_SECRET) {
-      console.error("❌ ERREUR : JWT_SECRET manquant dans .env");
+      console.error("❌ JWT_SECRET manquant dans .env");
       return NextResponse.json(
-        { error: "Erreur de configuration serveur." },
+        { error: "Erreur de configuration." },
         { status: 500 }
       );
     }
 
-    // Générer JWT
+    // Génération token
     const token = jwt.sign(
       {
         id: user.id,
         email: user.email,
-        role: user.role,
+        role: user.role, // startuper / investor
       },
       process.env.JWT_SECRET,
-      { expiresIn: "3h" } // tu peux changer
+      { expiresIn: "3h" }
     );
 
-    return NextResponse.json({
-      message: "Connexion réussie ✔",
-      token,
-      role: user.role,
-    });
+    // Tout est ok
+    return NextResponse.json(
+      {
+        message: "Connexion réussie ✔",
+        token,
+        role: user.role,
+      },
+      { status: 200 }
+    );
+
   } catch (error) {
     console.error("🔥 Erreur API Login :", error);
     return NextResponse.json(

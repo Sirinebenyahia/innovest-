@@ -1,53 +1,64 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { users } from "@/db/schema";
+import { users, startupers, investors } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { hash } from "bcryptjs";
 
 export async function POST(request: Request) {
   try {
-    const { email, password, role } = await request.json();
+    const data = await request.json();
+    const { email, password, role, fullName, startupName, investorType } = data;
 
-    // Vérifier champs requis
-    if (!email || !password || !role) {
+    if (!email || !password || !role || !fullName) {
       return NextResponse.json(
-        { error: "Email, mot de passe et rôle requis." },
+        { error: "Champs requis manquants." },
         { status: 400 }
       );
     }
 
-    // Vérifier si email existe déjà
-    const existingUser = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, email));
-
-    if (existingUser.length > 0) {
+    // Vérifier email
+    const existing = await db.select().from(users).where(eq(users.email, email));
+    if (existing.length > 0) {
       return NextResponse.json(
-        { error: "Un compte existe déjà avec cet email." },
+        { error: "Email déjà utilisé." },
         { status: 409 }
       );
     }
 
-    // Hash du mot de passe
-    const hashedPassword = await hash(password, 10);
+    const hashed = await hash(password, 10);
 
-    // Créer utilisateur
-    await db.insert(users).values({
-      email,
-      password: hashedPassword,
-      role: role.toUpperCase(), // STARTUP / INVESTOR
-    });
+    // Création user
+    const [u] = await db
+      .insert(users)
+      .values({
+        email,
+        password: hashed,
+        role,
+      })
+      .returning();
+
+    // INSERT selon le rôle
+    if (role === "startuper") {
+      await db.insert(startupers).values({
+        userId: u.id,
+        fullName,
+        startupName: startupName || null,
+      });
+    } else if (role === "investor") {
+      await db.insert(investors).values({
+        userId: u.id,
+        fullName,
+        investorType: investorType || null,
+      });
+    }
 
     return NextResponse.json(
-      { message: "Compte créé avec succès ✔" },
+      { message: "Compte créé avec succès" },
       { status: 201 }
     );
   } catch (error) {
-    console.error("🔥 Erreur API Signup :", error);
-    return NextResponse.json(
-      { error: "Erreur interne du serveur." },
-      { status: 500 }
-    );
+    console.error("Erreur signup:", error);
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
+

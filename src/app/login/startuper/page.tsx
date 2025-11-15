@@ -18,10 +18,10 @@ export default function LoginStartuperPage() {
 
     const data = await res.json();
 
-    if (res.ok && data.role === "STARTUP") {
+    if (res.ok && data.role === "startuper") {
       router.push("/dashboard/startuper");
     } else {
-      alert("Email ou mot de passe incorrect");
+      alert(data.error || "Email ou mot de passe incorrect");
     }
   }
 
@@ -35,7 +35,6 @@ export default function LoginStartuperPage() {
 
         <form onSubmit={handleLogin} className="space-y-5">
 
-          {/* Email */}
           <div>
             <label className="block text-gray-700 mb-1">Email</label>
             <input
@@ -46,7 +45,6 @@ export default function LoginStartuperPage() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="block text-gray-700 mb-1">Mot de passe</label>
             <input
@@ -57,7 +55,6 @@ export default function LoginStartuperPage() {
             />
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             className="w-full py-3 bg-[#006A63] text-white font-semibold rounded-full shadow hover:bg-[#00534F] transition"
