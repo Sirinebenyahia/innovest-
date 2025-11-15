@@ -1,36 +1,254 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# 🚀 Innovest – Plateforme Startups & Investisseurs  
+Application web moderne permettant la connexion entre startupeurs et investisseurs.  
+Développée avec **Next.js 16**, **TypeScript**, **Drizzle ORM**, **PostgreSQL** et **Radix UI / ShadCN components**.
 
-First, run the development server:
+---
+
+## 📌 Fonctionnalités principales
+
+- Authentification Startuper / Investisseur  
+- Création de compte (signup)  
+- Connexion (login) avec JWT  
+- Base de données PostgreSQL (Drizzle ORM)  
+- Formulaire avancé : création de startup  
+- UI moderne (TailwindCSS, Radix UI, framer-motion)  
+
+
+---
+
+# ⚙️ Installation & Setup
+
+## 1️⃣ Cloner le projet
+
+```bash
+git clone https://github.com/<votre-repo>.git
+cd innovest
+```
+
+## 2️⃣ Installer les dépendances
+
+```bash
+npm install
+```
+
+Inclut :
+
+- Next.js 16  
+- TailwindCSS  
+- Drizzle ORM  
+- PostgreSQL client  
+- Radix UI  
+- ShadCN components  
+- JWT Auth  
+- Bcrypt  
+
+Si besoin, installe manuellement :
+
+```bash
+npm install bcryptjs jsonwebtoken dotenv
+npm install class-variance-authority
+npm install @radix-ui/react-label @radix-ui/react-checkbox
+npm install lucide-react
+```
+
+---
+
+# 🔐 Configuration Environnement (.env)
+
+Créer un fichier :
+
+```
+.env
+```
+
+Et ajouter :
+
+```
+DATABASE_URL="postgres://USER:PASSWORD@localhost:5432/innovest"
+JWT_SECRET="ma-super-cle-ultra-secrete-321"
+```
+
+Générer un JWT secret fort :
+
+```bash
+"openssl rand -hex 32"
+```
+
+---
+
+# 🗄️ Base de données (Drizzle ORM + PostgreSQL)
+
+## 1️⃣ Fichier drizzle.config.ts
+
+```ts
+import { defineConfig } from "drizzle-kit";
+
+export default defineConfig({
+  schema: "./src/db/schema.ts",
+  out: "./src/db/migrations",
+  dialect: "postgresql",
+  dbCredentials: {
+    url: process.env.DATABASE_URL!,
+  },
+});
+```
+
+## 2️⃣ Schéma (src/db/schema.ts)
+
+```ts
+import { pgTable, serial, text } from "drizzle-orm/pg-core";
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  password: text("password").notNull(),
+  role: text("role").notNull(),
+});
+
+export const startupers = pgTable("startupers", {
+  id: serial("id").primaryKey(),
+  userId: serial("user_id").notNull(),
+  fullName: text("full_name").notNull(),
+  startupName: text("startup_name"),
+});
+
+export const investors = pgTable("investors", {
+  id: serial("id").primaryKey(),
+  userId: serial("user_id").notNull(),
+  fullName: text("full_name").notNull(),
+  investorType: text("investor_type"),
+});
+```
+
+## 3️⃣ Générer les migrations
+
+```bash
+npx drizzle-kit generate
+```
+
+Appliquer les migrations :
+
+```bash
+npx drizzle-kit migrate
+```
+
+Ouvrir Drizzle Studio :
+
+```bash
+npx drizzle-kit studio
+```
+
+---
+
+# 🔑 Authentification (Signup + Login)
+
+### ✔ API Signup – `/api/auth/signup`
+- Vérifie les champs  
+- Hash le mot de passe  
+- Enregistre selon le rôle  
+
+### ✔ API Login – `/api/auth/login`
+- Vérifie email  
+- Compare mot de passe (bcrypt)  
+- Retourne token JWT + rôle  
+
+---
+
+# 🎨 Composants UI (Input, Label, Button, Checkbox)
+
+Utilisés dans tous les formulaires du projet.
+
+Arborescence :
+
+```
+src/components/
+  input.tsx
+  button.tsx
+  label.tsx
+  checkbox.tsx
+  navbar.tsx
+```
+
+---
+
+# 🖥️ Lancer le projet
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrir : http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# 🚀 Build
 
-## Learn More
+```bash
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 🤝 Collaboration Git
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1️⃣ Récupérer la dernière version  
+```bash
+git pull origin main
+```
 
-## Deploy on Vercel
+2️⃣ Ajouter ton travail  
+```bash
+git add .
+git commit -m "feat: ajout fonctionnalité"
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3️⃣ Envoyer sur GitHub  
+```bash
+git push origin main
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Si conflit :  
+
+```bash
+git pull --rebase origin main
+```
+
+---
+
+# 📂 Structure du projet
+
+```
+src/
+  app/
+    signup/
+    login/
+    startup/create/
+    api/
+      auth/
+        signup/
+        login/
+      startup/
+        create/
+  components/
+  db/
+  lib/
+  public/
+```
+
+---
+
+# 🧪 Tests rapides
+
+✔ Signup Startuper → OK  
+✔ Signup Investor → OK  
+✔ Login → OK  
+✔ Drizzle Studio → OK  
+✔ Dashboard redirection → OK  
+✔ Page Create Startup → OK  
+
+---
+
+# 🎉  Innovest 
+

@@ -15,13 +15,21 @@ export default function SignupInvestor() {
   async function handleSubmit(e: any) {
     e.preventDefault();
 
-    await fetch("/api/auth/signup", {
+    const res = await fetch("/api/auth/signup", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         ...form,
         role: "investor",
       }),
     });
+
+    if (!res.ok) {
+      console.error("Erreur signup investor");
+      return;
+    }
 
     router.push("/login/investor");
   }
